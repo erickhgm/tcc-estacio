@@ -1,0 +1,184 @@
+]@CHARSET "ISO-8859-1";
+.x5 {
+	width: 5% !important;
+}
+.colunaAcoes {
+	width: 62px !important;
+}
+.x10 {
+	width: 10%;
+}
+.x15 {
+	width: 15%;
+}
+.x20 {
+	width: 20%;
+}
+.x25 {
+	width: 25%;
+}
+.x30 {
+	width: 30%;
+}
+.x35 {
+	width: 35%;
+}
+.x40 {
+	width: 40%;
+}
+.x45 {
+	width: 45%;
+}
+.x50 {
+	width: 50%;
+}
+.x55 {
+	width: 55%;
+}
+.x60 {
+	width: 60%;
+}
+.x65 {
+	width: 65%;
+}
+.x70 {
+	width: 70%;
+}
+.x75 {
+	width: 75%;
+}
+.x80 {
+	width: 80%;
+}
+.x85 {
+	width: 85%;
+}
+.x90 {
+	width: 90%;
+}
+.x95 {
+	width: 95%;
+}
+.x100 {
+	width: 100%;
+}
+.marginLeft_5 {
+	margin-left: 5px;
+}
+.marginLeft_10 {
+	margin-left: 10px;
+}
+
+#mensagens {
+	font-weight: 700;
+	margin-left: -40px;
+	list-style: none;
+}
+.disabled-editado {
+	color: #aaa;
+}
+.comentarios {
+	margin-left: 50px;
+	padding-bottom: 20px;
+}
+.labelLink {
+	cursor: pointer;
+}
+.labelLink:hover {
+	cursor: pointer;
+	color: #4083a9;
+}
+.msg {
+	display: block;
+	border: 1px solid;
+	padding: 5px 10px;
+	border-radius: 2px;
+	margin-top: 2px;
+	position: relative;
+	font-weight:700;
+	font-size:10px;	
+	margin-bottom: 10px;
+}
+
+.error {
+	color: #fff;
+	background: #e66454;
+	border-color: #df3c28;
+	background-image: linear-gradient(45deg,rgba(255,255,255,.04)25%,transparent 25%,transparent 50%,rgba(255,255,255,.04)50%,rgba(255,255,255,.04)75%,transparent 75%,transparent);
+	background-size: 20px 20px;
+}
+.msg:before {
+	border-bottom: solid;
+	border-width: 7px;
+	left: 16px;
+	top: -7px;
+	border-bottom-color: #e66454;
+	content: "";
+	position: absolute;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+}
+
+.avaliacao {
+	margin-left: 10px;
+	margin-top: -15px;
+	position: absolute;
+}
+.avaliacaoVisualizar {
+	margin-left: 0px;
+	margin-top: 10px;
+	position: absolute;
+}
+
+.nuComentariosTopico  {
+	margin-right: 10px;
+	margin-top: -15px;
+	margin-left: 10px;
+}
+.avatar img {
+	width: 75px;
+	height: 75px;
+	border-radius:2px;
+	cursor: pointer;
+	margin: 5px;
+}
+.avatar img:hover {
+	width: 75px;
+	height: 75px;
+	border-radius:2px;
+	cursor: pointer;
+	opacity: 0.75;
+	margin: 5px;
+}
+.fotoSelecionada {
+	border: 1px solid #888;
+	opacity:1px;
+	width: 80px !important;
+	height: 80px !important;
+}
+.fotoNaoSelecionada{
+	opacity:0.70;
+}
+.avaliar {
+	color: #aaa !important;
+	cursor: pointer;
+}
+.avaliar:hover {
+	color: #4083a9 !important;
+	cursor: pointer:
+}
+.avaliado {
+	color: #4083a9 !important;
+	cursor: pointer:
+}
+td label {
+	margin-left:5px;
+}
+.textoEnviarSenha {
+	margin-top: 10px;
+	margin-bottom: -15px;
+	font-size: 12px;
+	text-align: center;
+	color: #757;
+	font-weight: bold;
+}

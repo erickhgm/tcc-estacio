@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.aluno']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.professor']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.coordenador']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.consultar.aluno']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.consultar.professor']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.consultar.coordenador']}"  rendered="#{cadastrarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+		</ol>
+		<h:messages id="mensagens"  errorClass="alert alert-danger alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<h:form prependId="false" id="form" styleClass="form-horizontal"> 
+			<div class="row">
+				<div class="col-md-12">
+						<div class="panel">
+							<div class="panel-heading">
+								<h:outputText value="#{mensagens['display.consultar.usuario']}" />
+								<h6 class="text-light-gray text-semibold text-xs"><h:outputText value="#{mensagens['display.selecione.tipo.filtro']}"  /></h6>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="col-md-offset-1 col-md-11">
+										<h:selectOneRadio id="tpFiltro" layout="pageDirection"  value="#{consultarUsuarioBean.tpFiltro}">
+											<f:selectItem itemLabel="#{mensagens['display.por.nome']}" itemValue="1" />
+											<f:selectItem itemLabel="#{mensagens['display.por.email']}" itemValue="2"/>
+											<f:selectItem itemLabel="#{mensagens['display.por.matricula']}" itemValue="3"/>
+											<f:selectItem itemLabel="#{mensagens['display.por.cpf']}" itemValue="4"/>
+											<f:selectItem itemLabel="#{mensagens['display.todos']}" itemValue="6"/>
+											<f:ajax event="click"  render="filtros" onevent="mascaras()"/>
+										</h:selectOneRadio>
+									</div>
+								</div>
+								<h:panelGroup id="filtros" >
+								<h:outputScript>mascaras();marcaDagua();</h:outputScript>
+									<h:panelGroup rendered="#{consultarUsuarioBean.tpFiltro eq 1}">
+										<div class="form-group">
+											<h:outputLabel  styleClass="control-label col-sm-1">
+												<h:outputText id="nome" value="#{mensagens['display.nome']}"/>
+											</h:outputLabel>
+											<div class="col-sm-5">
+												<h:inputText id="nomeInput" value="#{consultarUsuarioBean.usuario.nome}" maxlength="58" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}" styleClass="form-control nome" autocomplete="off" rendered="#{consultarUsuarioBean.tpFiltro eq 1}"/>
+												<h:message for="nomeInput" errorClass="msg error"/>
+											</div>
+										</div>
+									</h:panelGroup>
+									
+									<h:panelGroup rendered="#{consultarUsuarioBean.tpFiltro eq 2}">
+										<div class="form-group">
+											<h:outputLabel rendered="#{consultarUsuarioBean.tpFiltro eq 2}" styleClass="control-label col-sm-1">
+												<h:outputText id="email" value="#{mensagens['display.email']}"/>
+											</h:outputLabel >
+											<div class="col-sm-5">
+												<h:inputText id="emailInput" value="#{consultarUsuarioBean.usuario.email}"  maxlength="50" styleClass="form-control email" autocomplete="off" rendered="#{consultarUsuarioBean.tpFiltro eq 2}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+												<h:message for="emailInput" errorClass="msg error"/>
+											</div>
+										</div>
+									</h:panelGroup>
+									
+									<h:panelGroup rendered="#{consultarUsuarioBean.tpFiltro eq 3}">
+										<div class="form-group">
+											<h:outputLabel styleClass="control-label col-sm-1">
+												<h:outputText id="matricula" value="#{mensagens['display.matricula']}"  />
+											</h:outputLabel >
+											<div class="col-sm-2">
+												<h:inputText id="matriculaInput" value="#{consultarUsuarioBean.usuario.matricula}" maxlength="13" styleClass="form-control matricula" autocomplete="off" rendered="#{consultarUsuarioBean.tpFiltro eq 3}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+												<h:message for="matriculaInput" errorClass="msg error"/>
+											</div>
+										</div>
+									</h:panelGroup>
+									
+									<h:panelGroup rendered="#{consultarUsuarioBean.tpFiltro eq 4}">
+										<div class="form-group">
+											<h:outputLabel  styleClass="control-label col-sm-1">
+												<h:outputText id="cpf" value="#{mensagens['display.cpf']}"/>
+											</h:outputLabel>
+											<div class="col-sm-2">
+												<h:inputText id="cpfInput" value="#{consultarUsuarioBean.usuario.cpf}" onfocus="mascaras()"  maxlength="11" styleClass="form-control cpf" autocomplete="off" rendered="#{consultarUsuarioBean.tpFiltro eq 4}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+												<h:message for="cpfInput" errorClass="msg error"/>
+											</div>
+										</div>
+									</h:panelGroup>
+								</h:panelGroup>
+							</div>
+							<div class="panel-footer">
+								<div class="form-group">
+									<div class="col-sm-offset-1 col-sm-11">
+										<h:commandButton  action="#{consultarUsuarioBean.consultarUsuario()}" value="#{mensagens['display.pesquisar']}" styleClass="btn btn-primary btn-xs"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

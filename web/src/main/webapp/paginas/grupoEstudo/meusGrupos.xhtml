@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.grupos.estudo']}" />
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.meus.grupos']}" />
+			</li>
+		</ol>
+		<h:messages id="mensagens"  errorClass="alert alert-danger alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<h:form prependId="false" id="form">
+			<div class="row">
+				<ui:repeat var="grupoEstudo" value="#{meusGruposBean.grupoEstudos}">
+					<div class="col-md-6">
+						<div class="panel panel-success panel-dark widget-profile">
+						<div class="panel-heading">
+							<div class="widget-profile-bg-icon"><i class="fa fa-group"/></div>
+							<h:graphicImage value="/resources/img/avatares/#{grupoEstudo.professor.avatar}" styleClass="widget-profile-avatar"/>
+							<div class="widget-profile-header">
+								<span>
+									<h:outputText value="#{grupoEstudo.noGrupo}" />
+								</span>
+								<br/>
+								<h:outputText value="#{mensagens['display.professor']}" />
+								<h:outputText value="#{grupoEstudo.professor.nome}" styleClass="marginLeft_5"/>
+							</div>
+						</div> <!-- / .panel-heading -->
+						<div class="list-group">
+							<div class="list-group-item">
+								<i class="fa fa-bullhorn list-group-icon"/>
+								<h:outputText value="#{mensagens['display.topicos']}" />
+								 <span class="badge badge-info">
+								 	<h:outputText value="#{grupoEstudo.nuTopicos}" />
+								 </span>
+							</div>
+							<div class="list-group-item">
+								<i class="fa fa-comments-o list-group-icon"/>
+								<h:outputText value="#{mensagens['display.comentarios']}" />
+								 <span class="badge badge-success">
+								 	<h:outputText value="#{grupoEstudo.nuComentariosGrupo}" />
+								 </span>
+							</div>
+							<div class="list-group-item">
+								<i class="fa fa-user list-group-icon"/>
+								<h:outputText value="#{mensagens['display.alunos']}" />
+								 <span class="badge badge-info">
+								 	<h:outputText value="#{grupoEstudo.nuAlunos()}" />
+								 </span>
+							</div>
+							<h:commandLink action="#{meusGruposBean.detalharGrupoEstudo(grupoEstudo)}" styleClass="list-group-item" value="#{mensagens['display.detalhar.grupo.estudo']}" />
+						</div>
+					</div>
+					</div>
+				</ui:repeat>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

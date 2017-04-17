@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<html class="gt-ie8 gt-ie9 not-ie pxajs">
+		<h:head>
+			<title>Faloo - Login</title>
+			 <h:outputStylesheet library="css" name="bootstrap.min.css" />
+			 <h:outputStylesheet library="css" name="codemirror.min.css" />
+			 <h:outputStylesheet library="css" name="pages.min.css" />
+			 <h:outputStylesheet library="css" name="pixel-admin.min.css" />
+			 <h:outputStylesheet library="css" name="rtl.min.css" />
+			 <h:outputStylesheet library="css" name="themes.min.css" />
+			 <h:outputStylesheet library="css" name="widgets.min.css" />
+			 <h:outputStylesheet library="css" name="custom.css" />
+			<h:outputScript library="js" name="jquery.min.js" />
+			<h:outputScript library="js" name="marca-dagua.js" />
+			<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/img/fav.ico" />
+		</h:head>
+		<style type="text/css">.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}</style>
+		<h:body styleClass="theme-default page-signin">
+			<div id="page-signin-bg">
+				<div class="overlay"/>
+				<h:graphicImage value="/resources/img/bg-login2.jpg"  library="img"/>
+			</div>
+				<div class="signin-container">
+					<div class="signin-info">
+						<a href="#" class="logo">
+							<h:graphicImage value="/resources/img/logo.png"  library="img"/>
+						</a>
+						<div class="slogan">
+							<h:outputText value="#{mensagens['display.slogan']}" />
+						</div>
+						<ul>
+							<li>
+								<i class="fa fa-group signin-icon"/>
+								<h:outputText value="#{mensagens['display.grupos.estudo']}" />
+							</li>
+							<li>
+								<i class="fa fa-bullhorn signin-icon"/>
+								<h:outputText value="#{mensagens['display.topicos']}" />
+							</li>
+							<li>
+								<i class="fa fa-comments-o signin-icon"/>
+								<h:outputText value="#{mensagens['display.comentarios']}" />
+							</li>
+							<li>
+								<i class="fa fa-envelope signin-icon"/>
+								<h:outputText value="#{mensagens['display.mensagens']}" />
+							</li>
+						</ul>
+					</div>
+					<div class="signin-form">
+						<h:form id="signin-form_id" prependId="false">
+							<div class="signin-text">
+								<span><h:outputText value="#{mensagens['display.entre.com.sua.conta']}" /> </span>
+							</div>
+							<div class="form-group w-icon">
+								<h:inputText id="matricula" value="#{loginBean.matricula}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}" autocomplete="off" maxlength="13" styleClass="form-control input-lg" />
+								<span class="fa fa-user signin-form-icon"/>
+							</div>
+							<h:message for="matricula" errorClass="msg error"/>
+							<div class="form-group w-icon">
+								<h:inputSecret  id="senha" value="#{loginBean.senha}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}" autocomplete="off" maxlength="8" styleClass="form-control input-lg" />
+								<span class="fa fa-lock signin-form-icon"/>
+							</div>
+							<h:message for="senha" errorClass="msg error"/>
+							<div class="form-actions">
+								<h:commandButton action="#{loginBean.logar}" value="#{mensagens['display.entrar.cap']}" styleClass="signin-btn bg-primary"/>
+								<a href="#{facesContext.externalContext.requestContextPath}/principal/recuperarSenha.jsf" class="forgot-password" >
+									<h:outputText value="#{mensagens['display.esqueceu.sua.senha']}" />
+								</a>
+								
+								<h:messages id="mensagens" style="text-align: center;margin-top: 15px;margin-bottom: -15px;" globalOnly="true" fatalClass="alert alert-info alert-dark" errorClass="alert alert-info alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-info alert-dark"/>
+							</div>
+						</h:form>
+						<div class="signin-with">
+							<a href="#{facesContext.externalContext.requestContextPath}/principal/primeiroAcesso.jsf" class="signin-with-btn" style="background:#4f6faa;background:rgba(79, 111, 170, .8);">
+								<h:outputText value="#{mensagens['display.primeiro.acesso.crie.sua.senha']}" />
+							</a>
+						</div>
+					</div>
+					
+				</div>
+		</h:body>
+	</html>
+</ui:composition>

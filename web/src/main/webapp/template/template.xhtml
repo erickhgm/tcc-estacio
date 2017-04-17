@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<html lang="pt_BR" class="gt-ie8 gt-ie9 not-ie pxajs"> 
+	<h:head>
+		<title>Faloo - Compartilhe conhecimento</title>
+		
+		 <h:outputStylesheet library="css" name="bootstrap.min.css" />
+		 <h:outputStylesheet library="css" name="codemirror.min.css" />
+		 <h:outputStylesheet library="css" name="pages.min.css" />
+		 <h:outputStylesheet library="css" name="pixel-admin.min.css" />
+		 <h:outputStylesheet library="css" name="rtl.min.css" />
+		 <h:outputStylesheet library="css" name="themes.min.css" />
+		 <h:outputStylesheet library="css" name="widgets.min.css" />
+		 <h:outputStylesheet library="css" name="custom.css" />
+		 <h:outputStylesheet library="css" name="linhaDoTempo.css" />
+		 <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/img/fav.ico" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	</h:head>
+			
+		<h:body styleClass="theme-default main-menu-animated animate-mm-sm animate-mm-md animate-mm-lg animate-mm-sm animate-mm-md animate-mm-lg">
+			<script>var init = [];</script>
+			<div id="main-wrapper">
+				<ui:insert name="cabecalho">
+					<ui:include src="./cabecalho.xhtml" />
+				</ui:insert>
+				
+				<ui:insert name="menu">
+					<ui:include src="./menu.xhtml" />
+				</ui:insert>
+					
+				<div id="content-wrapper">
+					<ui:insert name="conteudo" />
+				</div>
+				<div id="main-menu-bg"></div>
+				
+				<ui:insert name="rodape">
+					<ui:include src="./rodape.xhtml" />
+				</ui:insert>
+			</div>
+		</h:body>
+	</html>
+</ui:composition>

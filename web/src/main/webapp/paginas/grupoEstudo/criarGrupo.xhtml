@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.grupos.estudo']}" />
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.criar.grupo.estudo']}" />
+			</li>
+		</ol>
+		<h:messages id="mensagens" globalOnly="true" fatalClass="alert alert-danger alert-dark" errorClass="alert alert-warning alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<h:form id="form" prependId="false" styleClass="form-horizontal">
+					<div class="panel">
+						<div class="panel-heading">
+							<span class="panel-title">
+								<h:outputText value="#{mensagens['display.criar.grupo.estudo']}" />
+							</span>
+						</div>
+						
+						<div class="panel-body"  >
+							<div class="form-group">
+								<label class="control-label col-sm-2">
+									<h:outputText value="#{mensagens['display.nome.grupo']}"/>
+								</label>
+								<div class="col-sm-10">
+									<h:inputText id="titulo" value="#{criarGrupoEstudoBean.grupoEstudo.noGrupo}" autocomplete="off" styleClass="form-control" maxlength="50" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+									<h:message for="titulo" errorClass="msg error"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-2">
+									<h:outputText value="#{mensagens['display.pesquisar']}"/>
+								</label>
+								<div class="col-sm-10">
+									<h:inputText id="consultaAluno" autocomplete="off"  value="#{criarGrupoEstudoBean.consulta}" styleClass="form-control">
+										<f:ajax event="keyup" listener="#{criarGrupoEstudoBean.atualizarAlunos()}" render=":form:listaAlunos"/>
+									</h:inputText>
+								</div>
+							</div>
+							<h:panelGroup id="listaAlunos">
+								<div class="col-sm-offset-2 col-sm-10">
+									<div class="widget-followers">
+										<ui:repeat var="aluno" value="#{criarGrupoEstudoBean.repeatPaginator.model}">
+											<div class="follower">
+												<h:graphicImage library="img" value="/resources/img/avatares/#{aluno.avatar}" styleClass="follower-avatar"/>
+												<div class="body">
+													<h:commandLink action="#{criarGrupoEstudoBean.perfilUsuario(aluno)}" immediate="true" value="#{aluno.nome}" styleClass="follower-name"/>
+													<br/>
+													<h:outputText value="#{aluno.matricula}" styleClass="follower-username"/>
+													<div class="follower-controls tooltips" style="margin-top: -5px;">
+														<h:outputLabel value="#{mensagens['display.incluir']}" rendered="#{not aluno.marcado}" title="Clique aqui para incluir o aluno" styleClass="btn btn-outline btn-xs">
+															<i class="fa fa-plus"/>
+															<f:ajax event="click" render=":form:listaAlunos" listener="#{criarGrupoEstudoBean.marcarAluno(aluno)}"/>
+														</h:outputLabel>
+														<h:outputLabel value="#{mensagens['display.incluido']}" rendered="#{aluno.marcado}" title="Aluno incluido" styleClass="btn btn-success btn-xs">
+															<i class="fa fa-check"/>
+															<f:ajax event="click" render=":form:listaAlunos" listener="#{criarGrupoEstudoBean.desmarcarAluno(aluno)}"/>
+														</h:outputLabel>
+													</div>
+												</div>
+											</div>
+											<hr/>
+										</ui:repeat>
+									</div>
+									<h:panelGroup rendered="#{criarGrupoEstudoBean.repeatPaginator.paginas gt 1}">
+										<br/>
+										<div class="col-sm-12">
+											<ul class="pagination pagination-xs">
+												<h:outputLabel value="#{mensagens['display.icon.anterior']}"  styleClass="btn btn-outline btn-xs">
+													<f:ajax event="click" render=":form:listaAlunos" listener="#{criarGrupoEstudoBean.repeatPaginator.anterior()}"/>
+												</h:outputLabel>
+												
+												<h:outputText value="#{criarGrupoEstudoBean.repeatPaginator.paginaIndice} / " styleClass="marginLeft_5"/>
+												<h:outputText value="#{criarGrupoEstudoBean.repeatPaginator.paginas}" styleClass="marginLeft_5"/>
+												
+												<h:outputLabel value="#{mensagens['display.icon.proximo']}"  styleClass="btn btn-outline btn-xs marginLeft_5">
+													<f:ajax event="click" render=":form:listaAlunos" listener="#{criarGrupoEstudoBean.repeatPaginator.proximo()}"/>
+												</h:outputLabel>
+											</ul>
+										</div>
+									</h:panelGroup>
+								</div>
+							</h:panelGroup>
+							</div>
+							<div class="panel-footer">
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<h:commandButton  action="#{criarGrupoEstudoBean.criarGrupo}" value="#{mensagens['display.confirmar']}" styleClass="btn btn-primary btn-xs"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+	</ui:define>
+</ui:composition>

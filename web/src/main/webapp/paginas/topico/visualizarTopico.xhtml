@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.menu.topico']}" />
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.visualizar.topico']}" />
+			</li>
+		</ol>
+		<h:messages id="mensagens"  errorClass="alert alert-danger alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<h:form prependId="false" id="form">
+		<h:inputHidden id="validator"/>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="widget-article-comments tab-pane panel no-padding no-border fade active in">
+						<div class="panel">
+							<div class="panel-body">
+								<h3 style="margin-bottom: 25px;">
+									<h:outputText value="#{visualizarTopicoBean.topico.titulo}" />
+								</h3>
+								<h:outputText value="#{visualizarTopicoBean.topico.descricao}" escape="false" style="margin-bottom: 50px;"/>
+								<div class="pull-left">
+									<h:panelGroup rendered="#{not empty visualizarTopicoBean.topico.grupoEstudo}">
+										<i class="fa fa-group"/>
+										<h:commandLink immediate="true" action="#{visualizarTopicoBean.detalharGrupoEstudo(visualizarTopicoBean.topico.grupoEstudo)}"  value="#{visualizarTopicoBean.topico.grupoEstudo.noGrupo}" styleClass="marginLeft_10"/>
+									</h:panelGroup>
+									<br/>
+									<h:panelGroup id="avaliacao" styleClass="avaliacaoVisualizar">
+							 		 	<div class="box-tools pull-left" align="left">
+								 			<h:panelGroup rendered="#{visualizarTopicoBean.topico.avaliacaoUsuario.avaliacao == false}"> 
+								 		 		<h:commandLink styleClass="avaliar">
+								 		 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoPositivas}" />
+								 		 			<i class="glyphicon glyphicon-thumbs-up" />
+								 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.curtirTopico(visualizarTopicoBean.topico)}" immediate="true" execute="@form"/>
+								 		 		</h:commandLink>
+								 		 		<h:commandLink styleClass="avaliado marginLeft_10">
+								 		 			<i class="glyphicon glyphicon-thumbs-down" />
+								 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.removerAvaliacaoTopico(visualizarTopicoBean.topico)}" immediate="true" execute="@form"/>
+								 		 		</h:commandLink>
+									 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/>
+								 		 	</h:panelGroup>
+								 		 	<h:panelGroup rendered="#{visualizarTopicoBean.topico.avaliacaoUsuario.avaliacao == true}">
+								 		 		<h:commandLink styleClass="avaliado">
+										 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoPositivas}" />
+									 		 		<i class="glyphicon glyphicon-thumbs-up" />
+									 		 		<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.removerAvaliacaoTopico(visualizarTopicoBean.topico)}" immediate="true" execute="@form"/>
+								 		 		</h:commandLink>
+									 		 	<h:commandLink styleClass="marginLeft_10 avaliar">
+									 		 		<i class="glyphicon glyphicon-thumbs-down" />
+									 		 		<f:ajax event="click" execute="avaliacao" render="avaliacao" listener="#{visualizarTopicoBean.descurtirTopico(visualizarTopicoBean.topico)}"/>
+								 		 		</h:commandLink>
+									 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/>
+								 		 	</h:panelGroup>
+								 		 	<h:panelGroup rendered="#{empty visualizarTopicoBean.topico.avaliacaoUsuario}">
+								 		 		<h:commandLink  styleClass="avaliar">
+										 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoPositivas}" />
+								 		 			<i class="glyphicon glyphicon-thumbs-up" />
+								 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.curtirTopico(visualizarTopicoBean.topico)}" immediate="true" execute="@form"/>
+								 		 		</h:commandLink>
+								 		 		<h:commandLink styleClass="marginLeft_10 avaliar">
+									 		 		<i class="glyphicon glyphicon-thumbs-down" />
+									 		 		<f:ajax event="click" execute="avaliacao" render="avaliacao" listener="#{visualizarTopicoBean.descurtirTopico(visualizarTopicoBean.topico)}"/>
+								 		 		</h:commandLink>
+									 			<h:outputText value="#{visualizarTopicoBean.topico.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/>
+								 		 	</h:panelGroup>
+								 		 </div>
+						 		 	</h:panelGroup>
+								</div>
+								<div class="pull-right">
+									<ui:repeat var="categoria" value="#{visualizarTopicoBean.topico.categorias}">
+										<h:commandLink immediate="true" action="#{visualizarTopicoBean.buscarTopicosCategoria(categoria)}" styleClass="label label marginLeft_5" value="#{categoria.deCategoria}" />
+									</ui:repeat>
+								</div>
+							</div>
+						<hr/>
+						<h:panelGroup id="comments">
+							<div class="comentarios">
+							<ui:repeat var="comentario" varStatus="comentarioStatus" value="#{visualizarTopicoBean.topico.comentarios}">
+								<h:outputScript>marcaDagua()</h:outputScript>
+								<div class="comment">
+									<h:graphicImage value="/resources/img/avatares/#{comentario.usuario.avatar}" styleClass="comment-avatar"/>
+									<div class="comment-body">
+										<div class="comment-text">
+											<div class="comment-heading">
+												<h:commandLink action="#{visualizarTopicoBean.perfilUsuario(comentario.usuario)}" immediate="true" value="#{comentario.usuario.nome}" />
+												<span>
+													<h:outputText value="#{comentario.tempoComentario}" styleClass="marginLeft_5"/> 
+												</span>
+											</div>
+											<h:outputText value="#{comentario.descricao}" escape="false"  rendered="#{not (comentarioStatus.index eq visualizarTopicoBean.idEditar)}"/>
+											<h:inputTextarea id="descricaoEditar" value="#{comentario.descricao}" required="true" styleClass="form-control comentar" rendered="#{visualizarTopicoBean.textAreaComentario and comentarioStatus.index eq visualizarTopicoBean.idEditar}"/>
+											
+											<h:panelGroup rendered="#{visualizarTopicoBean.textAreaComentario and comentarioStatus.index eq visualizarTopicoBean.idEditar}">
+												<div style="height: 25px;" >
+													<h:outputLabel id="btnComentar" value="#{mensagens['display.atualizar']}" styleClass="btn btn-primary btn-xs pull-left labelLink" style="margin-top:5px;"  >
+														<f:ajax render="@form" execute="descricaoEditar" event="click" onevent="marcaDagua()" listener="#{visualizarTopicoBean.comentar()}"/>
+													</h:outputLabel>
+													<h:outputLabel id="btnCancelar" value="#{mensagens['display.cancelar']}" styleClass="btn btn-default btn-xs pull-left marginLeft_10 labelLink" style="margin-top:5px;">
+														<f:ajax render=":form:comments" execute="descricaoEditar" event="click" onevent="marcaDagua()" listener="#{visualizarTopicoBean.desabilitarCampoComentario()}"/>
+													</h:outputLabel>
+												</div>
+											</h:panelGroup>
+											
+											<div class="pull-right">
+												<h:panelGroup rendered="#{visualizarTopicoBean.msgExcluirComentario and visualizarTopicoBean.idComentario eq comentarioStatus.index}">
+													<h:outputText value="#{mensagens['display.confirma.exclusao.comentario']}" styleClass="marginLeft_10"/>
+													<h:outputLabel styleClass="labelLink marginLeft_10" >
+														<h:outputText value="#{mensagens['display.sim']}" />
+														<f:ajax event="click" render="@form" listener="#{visualizarTopicoBean.excluirComentario(comentario)}"/>
+													</h:outputLabel>
+													<h:outputLabel styleClass="labelLink" >
+														<h:outputText value="#{mensagens['display.nao']}" styleClass="marginLeft_10"/>
+														<f:ajax event="click" render="@form" listener="#{visualizarTopicoBean.fecharMsgExcluir()}"/>
+													</h:outputLabel>
+												</h:panelGroup>
+												<h:panelGroup rendered="#{comentario.usuario.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario and not (comentarioStatus.index eq visualizarTopicoBean.idEditar)}">
+													<h:outputLabel styleClass="labelLink marginLeft_10">
+														<i class="fa fa-trash-o"/>
+														<f:ajax event="click" render="@form" listener="#{visualizarTopicoBean.exibirMsgExcluir(comentarioStatus.index)}"/>
+													</h:outputLabel>
+													<h:outputLabel styleClass="labelLink marginLeft_10">
+														<i class="fa fa-edit"/>
+														<f:ajax event="click" render="@form" listener="#{visualizarTopicoBean.editarComentario(comentario, comentarioStatus.index)}"/>
+													</h:outputLabel>
+												</h:panelGroup>
+											</div>
+										</div>
+										<div class="comment-footer">
+											<h:panelGroup id="avaliacao">
+												<h:panelGroup rendered="#{comentario.avaliacaoUsuario.avaliacao == false}"> 
+									 		 		<h:outputLabel styleClass="avaliar">
+									 		 			<h:outputText value="#{comentario.nuAvaliacaoPositivas}" />
+									 		 			<i class="glyphicon glyphicon-thumbs-up" />
+									 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.curtirComentario(comentario)}" immediate="true" />
+									 		 		</h:outputLabel>
+									 		 		<h:outputLabel styleClass="avaliado marginLeft_10">
+									 		 			<i class="glyphicon glyphicon-thumbs-down" />
+									 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.removerAvaliacaoComentario(comentario)}" immediate="true" />
+									 		 		</h:outputLabel>
+										 			<h:outputText value="#{comentario.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/> 
+									 		 	</h:panelGroup>
+									 		 	<h:panelGroup rendered="#{comentario.avaliacaoUsuario.avaliacao == true}">
+									 		 		<h:outputLabel styleClass="avaliado">
+											 			<h:outputText value="#{comentario.nuAvaliacaoPositivas}" />
+										 		 		<i class="glyphicon glyphicon-thumbs-up" />
+										 		 		<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.removerAvaliacaoComentario(comentario)}" immediate="true" />
+									 		 		</h:outputLabel>
+										 		 	<h:outputLabel styleClass="marginLeft_10 avaliar">
+									 		 		<i class="glyphicon glyphicon-thumbs-down" />
+									 		 		<f:ajax event="click"  render="avaliacao" listener="#{visualizarTopicoBean.descurtirComentario(comentario)}" immediate="true"/>
+								 		 		</h:outputLabel>
+									 			<h:outputText value="#{comentario.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/>
+								 		 	</h:panelGroup>
+								 		 	<h:panelGroup rendered="#{empty comentario.avaliacaoUsuario}">
+								 		 		<h:outputLabel styleClass="avaliar">
+										 			<h:outputText value="#{comentario.nuAvaliacaoPositivas}" />
+								 		 			<i class="glyphicon glyphicon-thumbs-up" />
+								 		 			<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.curtirComentario(comentario)}" immediate="true"/>
+								 		 		</h:outputLabel>
+								 	 		<h:outputLabel styleClass="marginLeft_10 avaliar">
+									 		 		<i class="glyphicon glyphicon-thumbs-down" />
+									 		 		<f:ajax event="click" render="avaliacao" listener="#{visualizarTopicoBean.descurtirComentario(comentario)}" immediate="true"/>
+								 		 		</h:outputLabel>
+									 			<h:outputText value="#{comentario.nuAvaliacaoNegativas}" styleClass="marginLeft_10"/>
+								 		 	</h:panelGroup>
+									</h:panelGroup>
+									</div>
+								</div>
+							</div>
+							</ui:repeat>
+							<div class="comment">
+								<h:graphicImage value="/resources/img/avatares/#{usuarioSessionBean.usuarioSessao.avatar}" styleClass="comment-avatar"/>
+								<div class="comment-body">
+									<h:inputTextarea id="descricao" required="true" value="#{visualizarTopicoBean.comentario.descricao}" onfocus="expandir()"  styleClass="form-control comentar" rows="1" />
+									<div style="height: 25px;">
+										<h:outputLabel id="btnComentar" value="#{mensagens['display.comentar']}" styleClass="btn btn-primary btn-xs pull-left" style="display:none;margin-top:5px;" >
+											<f:ajax render="@form" execute="descricao" event="click" onevent="marcaDagua()" listener="#{visualizarTopicoBean.comentar()}"/>
+										</h:outputLabel>
+									</div>
+								</div> 
+							</div>
+							</div>
+							</h:panelGroup>
+						</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

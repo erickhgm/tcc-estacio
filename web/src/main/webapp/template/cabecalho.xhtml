@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:facet name="cabecalho" />
+	<div id="main-navbar" class="navbar navbar-inverse" role="navigation">
+		<!-- Main menu toggle -->
+		<button type="button" id="main-menu-toggle"><i class="navbar-icon fa fa-bars icon"></i><span class="hide-menu-text">HIDE MENU</span></button>
+		
+		<div class="navbar-inner">
+			<!-- Main navbar header -->
+			<div class="navbar-header">
+
+				<!-- Logo -->
+				<a href="#{facesContext.externalContext.requestContextPath}/paginas/inicio/painelPrincipal.jsf" class="navbar-brand">
+					<h:graphicImage value="/resources/img/logo_principal.png"  library="img"/>
+				</a>
+
+				<!-- Main navbar toggle -->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse"><i class="navbar-icon fa fa-bars"></i></button>
+
+			</div> <!-- / .navbar-header -->
+
+			<div id="main-navbar-collapse" class="collapse navbar-collapse main-navbar-collapse">
+				<div>
+					<ul class="nav navbar-nav">
+						<li>
+							<h:outputLink value="#{facesContext.externalContext.requestContextPath}/paginas/inicio/painelPrincipal.jsf">
+								<h:outputText value="#{mensagens['display.inicio.caps']}" />
+							</h:outputLink>
+						</li>
+					</ul>
+				
+					<div class="right clearfix">
+						<ul class="nav navbar-nav pull-right right-navbar-nav">
+							<li class="nav-icon-btn nav-icon-btn-danger dropdown">
+								<a href="#notifications" class="dropdown-toggle" data-toggle="dropdown">
+									<span class="label"><h:outputText value="#{notificacaoBean.nuNotificacaoTopicos}" /> </span>
+									<i class="nav-icon fa fa-bullhorn"></i>
+									<span class="small-screen-text"><h:outputText value="Notificações" /> </span>
+								</a>
+
+								<!-- NOTIFICATIONS -->
+								<div class="dropdown-menu widget-notifications no-padding" style="width: 300px">
+									<h:form prependId="false">
+									<div class="notifications-list scrollNotificacao" style="max-height:250px">
+										<ui:repeat var="topico" value="#{notificacaoBean.notificaoTopicos}">
+											<div class="notification">
+												<div class="notification-title text-success"><h:commandLink action="#{notificacaoBean.perfilUsuario(topico.usuario)}" value="#{topico.usuario.nome}" /> </div>
+												<div class="notification-description"><strong><h:commandLink action="#{notificacaoBean.detalharTopico(topico)}" value="#{topico.titulo}" /></strong></div>
+												<div class="notification-ago"><h:outputText value="#{topico.tempoTopico}" /> </div>
+												<div class="notification-icon fa fa-bullhorn bg-info"></div>
+											</div>
+										</ui:repeat>
+									</div> 
+									<h:outputLink  value="#{facesContext.externalContext.requestContextPath}/paginas/topico/ultimosTopicos.jsf"  styleClass="notifications-link">
+										<h:outputText value="#{mensagens['display.mais.topicos']}" />
+									</h:outputLink>
+									</h:form>
+								</div> 
+							</li>
+							<li class="nav-icon-btn nav-icon-btn-success dropdown">
+								<a href="#messages" class="dropdown-toggle" data-toggle="dropdown">
+									<span class="label">
+										<h:outputText value="#{notificacaoBean.nuNotificacaoMensagens}" />
+									</span>
+									<i class="nav-icon fa fa-envelope"></i>
+									<span class="small-screen-text">
+										<h:outputText value="#{mensagens['display.novas.mensagens']}" />
+									</span>
+								</a>
+								
+								<h:panelGroup rendered="#{not empty notificacaoBean.notificaoMensagens}">
+								<!-- MESSAGES -->
+								<div class="dropdown-menu widget-messages-alt no-padding" style="width: 300px;">
+									<h:form prependId="false">
+									<div class="messages-list scrollNotificacao" >
+										<ui:repeat var="mensagem" value="#{notificacaoBean.notificaoMensagens}">
+											<div class="message">
+												<h:graphicImage library="img" value="/resources/img/avatares/#{mensagem.remetente.avatar}" styleClass="message-avatar"/>
+												<h:commandLink action="#{notificacaoBean.verMensagem(mensagem)}" value="#{mensagem.titulo}" styleClass="message-subject"/>
+												<div class="message-description">
+													<h:outputText value="#{mensagens['display.de']}" />
+													<h:commandLink action="#{notificacaoBean.perfilUsuario(mensagem.remetente)}" value="#{mensagem.remetente.nome}" styleClass="marginLeft_5"/>
+													<h:outputText value="#{mensagem.tempo}" styleClass="marginLeft_5"/>
+												</div>
+											</div> <!-- / .message -->
+										</ui:repeat>
+									</div>
+									<div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div> <!-- / .messages-list -->
+									<a href="#{facesContext.externalContext.requestContextPath}/paginas/mensagens/email.jsf" class="messages-link"><h:outputText value="#{mensagens['display.mais.mensagens.cap']}" /> </a>
+									</h:form>
+								</div> <!-- / .dropdown-menu -->
+								</h:panelGroup>
+								<h:panelGroup rendered="#{empty notificacaoBean.notificaoMensagens}">
+									<div class="dropdown-menu widget-messages-alt no-padding" style="width: 300px;">
+										<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
+										<div class="messages-list" id="main-navbar-messages" style="overflow: hidden; width: auto; height: auto;">
+										</div>
+										<div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div></div> <!-- / .messages-list -->
+										<a href="#" class="messages-link"><h:outputText value="#{mensagens['display.nao.existem.novas.mensagens']}" /> </a>
+									</div>
+								</h:panelGroup>
+							</li>
+							
+							<!-- /3. $END_NAVBAR_ICON_BUTTONS -->
+
+							<li>
+								<h:form prependId="false"  styleClass="navbar-form  pull-left">
+									<div class="form-group input-group-sm has-feedback no-margin">
+										<h:inputText id="pesquisar" autocomplete="off" value="#{pesquisaBean.consulta}" styleClass="form-control" />
+										<h:commandLink action="#{pesquisaBean.pesquisar()}" value="" styleClass="fa fa-search form-control-feedback labelLink">
+										</h:commandLink>
+								    </div>
+								</h:form>
+							</li>
+
+							<li class="dropdown">
+								<h:form id="formSair" prependId="false" style="margin-left: 10px;">
+									<a href="#" class="dropdown-toggle user-menu" data-toggle="dropdown">
+										<h:graphicImage library="img" value="/resources/img/avatares/#{usuarioSessionBean.usuarioSessao.avatar}" styleClass="message-avatar"/>
+										<span>
+											<h:outputText value="#{usuarioSessionBean.usuarioSessao.nome}" />
+										</span>
+									</a>
+									<ul class="dropdown-menu">
+										<li>
+											<h:commandLink action="#{notificacaoBean.perfilUsuario(usuarioSessionBean.usuarioSessao)}" value="#{mensagens['display.perfil']}"/>
+										</li>
+										<li class="divider"></li>
+										<li>
+											<h:commandLink value="#{mensagens['display.sair']}" action="#{loginBean.deslogar}" >
+												<i class="dropdown-icon fa fa-power-off"/>
+											</h:commandLink>
+										</li>
+									</ul>
+								</h:form>
+							</li>
+						</ul> <!-- / .navbar-nav -->
+					</div> <!-- / .right -->
+				</div>
+			</div> <!-- / #main-navbar-collapse -->
+		</div> <!-- / .navbar-inner -->
+	</div>
+</ui:composition>

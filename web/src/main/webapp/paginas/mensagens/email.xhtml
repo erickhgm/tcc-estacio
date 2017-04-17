@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<html class="gt-ie8 gt-ie9 not-ie pxajs">
+<h:head>
+	<title>Faloo . Compartilhe Conhecimento</title>
+	 <h:outputStylesheet library="css" name="bootstrap.min.css" />
+	 <h:outputStylesheet library="css" name="codemirror.min.css" />
+	 <h:outputStylesheet library="css" name="pages.min.css" />
+	 <h:outputStylesheet library="css" name="pixel-admin.min.css" />
+	 <h:outputStylesheet library="css" name="rtl.min.css" />
+	 <h:outputStylesheet library="css" name="themes.min.css" />
+	 <h:outputStylesheet library="css" name="widgets.min.css" />
+	 <h:outputStylesheet library="css" name="custom.css" />
+	 <h:outputStylesheet library="css" name="linhaDoTempo.css" />
+	 <link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/img/fav.ico" />
+</h:head>
+<script>var init = [];</script>
+<div id="main-wrapper">
+<!-- CABECALHO -->
+<ui:insert name="cabecalho">
+	<ui:include src="/template/cabecalho.xhtml" />
+</ui:insert>
+<!-- MENU -->
+<ui:insert name="menu">
+	<ui:include src="/template/menu.xhtml" />
+</ui:insert>	
+<h:body styleClass="theme-default main-menu-animated page-mail animate-mm-sm animate-mm-md animate-mm-lg animate-mm-sm animate-mm-md animate-mm-lg">
+
+<!-- CONTEUDO -->
+<h:form id="formGeral" prependId="false">
+	<div id="content-wrapper">
+		<div class="mail-nav">
+			<div class="compose-btn">
+				<h:outputLabel onclick="novaMsg();" styleClass="btn btn-primary btn-labeled btn-block">
+					<f:ajax event="click" render="m mensagens teste verMensagem menu tituloCaixa" listener="#{caixaEntradaBean.exibirNovaMensagem()}"/>
+					<i class="btn-label fa fa-pencil-square-o"/>
+					<h:outputText value="#{mensagens['display.nova.mensagem']}" /> 
+				</h:outputLabel>
+			</div>
+			<div class="navigation">
+				<ul class="sections">
+					<li id="tabPrincipal" class="active">
+						<h:commandLink>
+							<i class="m-nav-icon fa fa-inbox"/>
+							<f:ajax event="click" render="m mensagens verMensagem menu tituloCaixa" onevent="tabPrincipal()" listener="#{caixaEntradaBean.exibirMsgsRecebidas()}"/>
+							<h:outputText value="#{mensagens['display.principal']}" />
+							<span class="label pull-right">
+								<h:outputText value="#{caixaEntradaBean.nuMsgRecebidas}" />
+							</span>
+						</h:commandLink>
+					</li>
+					<li id="tabEnviados">
+						<h:commandLink   >
+							<i class="m-nav-icon fa fa-envelope"/>
+							<f:ajax event="click" render="m mensagens verMensagem menu tituloCaixa" onevent="tabEnviados()" listener="#{caixaEntradaBean.exibirMsgsEnviadas()}"/>
+							<h:outputText value="#{mensagens['display.enviados']}"  />
+							<span class="label pull-right">
+								<h:outputText value="#{caixaEntradaBean.nuMsgEnviadas}" />
+							</span>
+						</h:commandLink>
+					</li>
+					<li id="tabLixeira">
+						<h:commandLink>
+							<i class="m-nav-icon fa fa-trash-o"/>
+							<f:ajax event="click" render="m mensagens verMensagem menu tituloCaixa" onevent="tabLixeira()" listener="#{caixaEntradaBean.exibirMsgsExcluidas()}"/>
+							<h:outputText value="#{mensagens['display.lixeira']}" />
+							<span class="label pull-right">
+								<h:outputText value="#{caixaEntradaBean.nuMsgExcluidas}" />
+							</span>
+						</h:commandLink>
+					</li>
+					<li class="divider"/>
+				</ul>
+			</div>
+		</div>
+		<h:panelGroup id="msgBox">
+		<div class="mail-container">
+		
+		<!-- MENSAGEM -->
+		<h:panelGroup id="verMensagem">
+			<h:panelGroup  rendered="#{caixaEntradaBean.verMensagem}">
+				<div class="mail-container-header show">
+					<h:outputText value="#{caixaEntradaBean.mensagemSelecionada.titulo}" />
+				</div>
+			
+				<div class="mail-controls clearfix">
+					<div class="btn-toolbar wide-btns pull-left tooltips" role="toolbar">
+						<div class="btn-group tooltips">
+							<h:outputLabel title="Enviar para lixeira" styleClass="btn">
+								<i class="fa fa-trash-o"/>
+								<f:ajax event="click" render="@form" listener="#{caixaEntradaBean.excluirMensagem(caixaEntradaBean.mensagemSelecionada)}"/>
+							</h:outputLabel>
+						</div>
+					</div>
+		
+				</div>
+				<div class="mail-info">
+					<h:graphicImage value="/resources/img/avatares/#{caixaEntradaBean.mensagemSelecionada.remetente.avatar}"  library="img" styleClass="avatar"/>
+					<div class="from">
+						<div class="name"><h:outputText value="#{caixaEntradaBean.mensagemSelecionada.remetente.nome}" /> </div>
+						<div class="email"><h:outputText value="#{caixaEntradaBean.mensagemSelecionada.remetente.email}" /></div>
+					</div>
+		
+					<div class="date"><h:outputText value="#{caixaEntradaBean.mensagemSelecionada.tempo}" /></div>
+				</div>
+				<div class="mail-message-body">
+					<h:outputText escape="false" value="#{caixaEntradaBean.mensagemSelecionada.mensagem}" />
+				</div>
+				<div class="mail-attachments"/>
+				<div class="message-details-reply">
+					<span id="message-details-reply"  class="expanding-input">
+						<h:inputTextarea id="deResposta" value="#{caixaEntradaBean.msgResponder.mensagem}" onclick="exibirMensagemResponta()" styleClass="form-control expanding-input-target" rows="5"/>
+						<div id="msgResposta" class="expanding-input-content" style="margin-top: 10px;display:none;">
+							<h:commandButton action="#{caixaEntradaBean.responderMensagem()}" value="#{mensagens['display.enviar.mensagem']}" styleClass="btn btn-primary btn-xs pull-right"/>
+						</div>
+					</span>
+				</div>
+			
+			</h:panelGroup>
+		</h:panelGroup>
+		<h:panelGroup id="teste">
+			<h:outputScript>autocomplete();editorTexto();</h:outputScript>
+			<h:panelGroup id="novaMsg" rendered="#{caixaEntradaBean.novaMensagem}">
+				<div class="mail-container-header">
+					<h:outputText value="#{mensagens['display.nova.mensagem']}" />
+				</div>
+					<h:panelGroup styleClass="new-mail-form form-horizontal">
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="mail-from"><h:outputText value="#{mensagens['display.de']}" /> </label>
+							<div class="col-sm-10">
+								<h:inputText styleClass="form-control" disabled="true" id="mail-from" value="#{usuarioSessionBean.usuarioSessao.email}"/>
+							</div>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="s2id_autogen1"><h:outputText value="#{mensagens['display.para']}" /> </label>
+							<div class="col-sm-10">
+								<h:panelGroup rendered="#{not caixaEntradaBean.msgPrivada}">
+									<div class="select2-primary">
+										<h:selectManyMenu id="destinatarios" value="#{caixaEntradaBean.destinatariosSelecionadas}"   styleClass="form-control autocompleteUsuario select2-offscreen" tabindex="-1">
+											<f:selectItems value="#{caixaEntradaBean.listaAlunos}" var="aluno" itemValue="#{aluno.idUsuario}"  itemLabel="#{aluno.nome} - #{aluno.matricula}"/>
+										</h:selectManyMenu>
+									</div>
+								</h:panelGroup>
+								<h:panelGroup rendered="#{caixaEntradaBean.msgPrivada}">
+									<h:outputText style="line-height: 32px;" value="#{caixaEntradaBean.mensagem.destinatario.matriculaNomeAluno}" />
+								</h:panelGroup>
+							</div>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-2 control-label" for="mail-subject"><h:outputText value="#{mensagens['display.assunto']}" /> </label>
+							<div class="col-sm-10">
+								<h:inputText styleClass="form-control"  value="#{caixaEntradaBean.mensagem.titulo}"/>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<h:inputTextarea styleClass="form-control editorTexto" value="#{caixaEntradaBean.mensagem.mensagem}" rows="5" />
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<h:commandButton action="#{caixaEntradaBean.enviarMensagem()}" value="#{mensagens['display.enviar.mensagem']}" styleClass="btn btn-primary btn-xs" />
+							</div>
+						</div>
+				</h:panelGroup>
+			</h:panelGroup>
+			</h:panelGroup>
+			<div  class="mail-container-header">
+				<h:panelGroup id="tituloCaixa">
+					<h:outputText value="#{mensagens['display.caixa.entrada']}" rendered="#{caixaEntradaBean.msgEnviadas or caixaEntradaBean.msgExcluidas or caixaEntradaBean.msgRecebidas}"/>
+					<h:panelGroup class="pull-right" style="width: 200px;margin-top: 3px;" rendered="#{caixaEntradaBean.msgEnviadas or caixaEntradaBean.msgExcluidas or caixaEntradaBean.msgRecebidas}">
+						<div class="form-group input-group-sm has-feedback no-margin">
+							<h:inputText id="procurar" styleClass="form-control" />
+							<span class="fa fa-search form-control-feedback" style="top: -1px"></span>
+						</div>
+					</h:panelGroup>
+				</h:panelGroup>
+			</div>
+			<div class="mail-controls clearfix">
+				<h:messages id="mensagens" globalOnly="true" fatalClass="alert alert-danger alert-dark" errorClass="alert alert-warning alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+				<div class="btn-toolbar wide-btns pull-left" role="toolbar">
+				<h:panelGroup id="menu"> 
+				<h:panelGroup  rendered="#{caixaEntradaBean.msgEnviadas or caixaEntradaBean.msgRecebidas or caixaEntradaBean.msgExcluidas}">
+					<div id="menuMsg" class="btn-group">
+						<div class="btn-group">
+							<button type="button" class="btn dropdown-toggle" data-toggle="dropdown"><i class="fa fa-check-square-o"/><i class="fa fa-caret-down"/></button>
+							<ul class="dropdown-menu" role="menu">
+								<li>
+									<h:commandLink immediate="true" value="#{mensagens['display.selecionar.todas']}"  >
+										<f:ajax event="click" render="msgRecebidas msgEnviadas msgExcluidas"  listener="#{caixaEntradaBean.selecionarTodasMsgs()}"/>
+									</h:commandLink>
+								</li>
+								<li>
+									<h:commandLink immediate="true" value="#{mensagens['display.deselecionar.todas']}"  >
+										<f:ajax event="click" render="msgRecebidas msgEnviadas msgExcluidas"  listener="#{caixaEntradaBean.deselecionarTodasMsgs()}"/>
+									</h:commandLink>
+								</li>
+								<li class="divider"/>
+								<li>
+									<h:commandLink immediate="true" value="#{mensagens['display.marcar.como.lida']}"  >
+										<f:ajax event="click" render="msgRecebidas msgEnviadas msgExcluidas"  listener="#{caixaEntradaBean.marcarMsgs()}"/>
+									</h:commandLink>
+								</li>
+								<li>
+									<h:commandLink immediate="true" value="#{mensagens['display.marcar.como.nao.lida']}"  >
+										<f:ajax event="click" render="msgRecebidas msgEnviadas msgExcluidas"  listener="#{caixaEntradaBean.desmarcarMsgs()}"/>
+									</h:commandLink>
+								</li>
+							</ul>
+						</div>
+						<h:commandLink title="#{mensagens['display.atualizar']}" styleClass="btn marginLeft_10">
+							<i class="fa fa fa-repeat"/>
+							<f:ajax event="click" render="@form" listener="#{caixaEntradaBean.atualizarMsg()}"/>
+						</h:commandLink>
+						<h:commandLink title="#{mensagens['display.excluir']}" styleClass="btn marginLeft_10">
+							<i class="fa fa fa-trash-o"/>
+							<f:ajax event="click" render="@form" listener="#{caixaEntradaBean.excluirMsg()}"/>
+						</h:commandLink>
+						<h:commandLink action="#{caixaEntradaBean.removerLixeiraMsgs()}" title="Remover da lixeira" styleClass="btn marginLeft_10" rendered="#{caixaEntradaBean.msgExcluidas}">
+							<i class="fa fa fa-trash-o"/>
+							<f:ajax event="click" render="@form" listener="#{caixaEntradaBean.removerLixeiraMsgs()}"/>
+						</h:commandLink>
+					</div>
+					</h:panelGroup>
+					</h:panelGroup>
+				</div>
+			</div>
+			<h:panelGroup id="m">
+			<!-- RECEBIDAS -->
+				<h:panelGroup id="msgRecebidas" rendered="#{caixaEntradaBean.msgRecebidas and not caixaEntradaBean.verMensagem}">
+					<ul class="mail-list">
+						<ui:repeat var="mensagem" value="#{caixaEntradaBean.mensagemsRecebidas}">
+							<li class="mail-item unread">
+								<div class="m-chck"><label class="px-single">
+									<h:selectBooleanCheckbox value="#{mensagem.selecionada}" styleClass="px" >
+										<f:ajax event="click" listener="#{caixaEntradaBean.selecionarMsg(mensagem)}"/>
+									</h:selectBooleanCheckbox>
+									<span class="lbl"></span></label></div>
+									<div class="m-star"></div>
+									<h:outputLabel onclick="verMsg()" style="width:100%;" styleClass="labelLink">
+										<div class="m-from"><a href=""><h:outputText value="#{mensagem.remetente.nome}" /> </a></div>
+										<div class="m-subject"> 
+											<a href="">
+												<span class="label label-pa-purple">
+													<h:outputText value="#{mensagens['display.recebida']}"  rendered="#{not (mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario)}"/>
+													<h:outputText value="#{mensagens['display.enviada']}"  rendered="#{mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario}"/>
+												</span>
+												<h:outputText value="#{mensagem.titulo}" styleClass="marginLeft_10"/>
+											</a>
+										</div>
+										<div class="m-date">
+											<h:outputText value="#{mensagem.tempo}"/> 
+										</div>
+									<f:ajax event="click"  render="@form" listener="#{caixaEntradaBean.selecionarMensagem(mensagem)}"/>
+									</h:outputLabel>
+								</li>
+						</ui:repeat>
+					</ul>
+				</h:panelGroup>
+				
+				<!-- ENVIDAS -->
+				<h:panelGroup id="msgEnviadas" rendered="#{caixaEntradaBean.msgEnviadas and not caixaEntradaBean.verMensagem}">
+					<ul class="mail-list">
+						<ui:repeat var="mensagem" value="#{caixaEntradaBean.mensagemEnviadas}"  >
+							<li class="mail-item unread">
+								<div class="m-chck"><label class="px-single">
+									<h:selectBooleanCheckbox value="#{mensagem.selecionada}" styleClass="px" >
+										<f:ajax event="click" listener="#{caixaEntradaBean.selecionarMsg(mensagem)}"/>
+									</h:selectBooleanCheckbox>
+									<span class="lbl"></span></label></div>
+									<div class="m-star"></div>
+									<h:outputLabel onclick="verMsg()" style="width:100%;" styleClass="labelLink">
+										<div class="m-from"><a href=""><h:outputText value="#{mensagem.remetente.nome}" /> </a></div>
+										<div class="m-subject"> 
+											<a href="">
+												<span class="label label-pa-purple">
+													<h:outputText value="#{mensagens['display.recebida']}"  rendered="#{not (mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario)}"/>
+													<h:outputText value="#{mensagens['display.enviada']}"  rendered="#{mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario}"/>
+												</span>
+												<h:outputText value="#{mensagem.titulo}" styleClass="marginLeft_10"/>
+											</a>
+										</div>
+										<div class="m-date">
+											<h:outputText value="#{mensagem.tempo}"/> 
+										</div>
+									<f:ajax event="click"  render="@form" listener="#{caixaEntradaBean.selecionarMensagem(mensagem)}"/>
+								</h:outputLabel>
+							</li>
+						</ui:repeat>
+					</ul>
+				</h:panelGroup>
+				
+				<!-- EXCLUIDAS -->
+				<h:panelGroup id="msgExcluidas" rendered="#{caixaEntradaBean.msgExcluidas and not caixaEntradaBean.verMensagem}">
+					<ul class="mail-list">
+						<ui:repeat var="mensagem" value="#{caixaEntradaBean.mensagensExcluidas}"  >
+							<li class="mail-item unread">
+								<div class="m-chck"><label class="px-single">
+									<h:selectBooleanCheckbox value="#{mensagem.selecionada}" styleClass="px" >
+										<f:ajax event="click" listener="#{caixaEntradaBean.selecionarMsg(mensagem)}"/>
+									</h:selectBooleanCheckbox>
+									<span class="lbl"></span></label></div>
+									<div class="m-star"></div>
+									<h:outputLabel onclick="verMsg()" style="width:100%;" styleClass="labelLink">
+										<div class="m-from"><a href=""><h:outputText value="#{mensagem.remetente.nome}" /> </a></div>
+										<div class="m-subject"> 
+											<a href="">
+												<span class="label label-pa-purple">
+													<h:outputText value="#{mensagens['display.recebida']}"  rendered="#{not (mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario)}"/>
+													<h:outputText value="#{mensagens['display.enviada']}"  rendered="#{mensagem.remetente.idUsuario eq usuarioSessionBean.usuarioSessao.idUsuario}"/>
+												</span>
+												<h:outputText value="#{mensagem.titulo}" styleClass="marginLeft_10"/>
+											</a>
+										</div>
+										<div class="m-date">
+											<h:outputText value="#{mensagem.tempo}"/> 
+										</div>
+									<f:ajax event="click"  render="@form" listener="#{caixaEntradaBean.selecionarMensagem(mensagem)}"/>
+								</h:outputLabel>
+							</li>
+						</ui:repeat>
+					</ul>
+				</h:panelGroup>
+				</h:panelGroup>
+				</div>
+			</h:panelGroup>
+		</div>
+	</h:form>
+	<div id="main-menu-bg"/>
+	</h:body>
+	
+	<!-- RODAPE -->
+	<ui:insert name="rodape">
+		<ui:include src="/template/rodape.xhtml" />
+	</ui:insert>
+	</div>
+	</html>
+</ui:composition>

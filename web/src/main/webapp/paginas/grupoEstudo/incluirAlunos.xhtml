@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.grupos.estudo']}" />
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.detalhar.grupo.estudo']}" />
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.incluir.alunos']}" />
+			</li>
+		</ol>
+		<h:messages id="mensagens" globalOnly="true" fatalClass="alert alert-danger alert-dark" errorClass="alert alert-warning alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<div class="row">
+			<div class="col-md-12">
+				<h:form id="form" prependId="false" styleClass="form-horizontal">
+					<div class="panel">
+						<div class="panel-heading">
+							<span class="panel-title">
+								<h:outputText value="#{mensagens['display.incluir.alunos']}" />
+							</span>
+						</div>
+						
+						<div class="panel-body"  >
+							<div class="form-group">
+								<div class="col-sm-12">
+									<label class="control-label">
+										<h:outputText value="#{mensagens['display.nome.grupo']} "/>
+									</label>
+									<h:outputText id="titulo" value="#{incluirAlunosBean.grupoEstudo.noGrupo}" autocomplete="off"  styleClass="marginLeft_10" maxlength="50" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+									<h:message for="titulo" errorClass="msg error"/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-12">
+									<h:inputText id="consultaAluno" autocomplete="off"  value="#{incluirAlunosBean.consulta}" styleClass="form-control">
+										<f:ajax event="keyup" listener="#{incluirAlunosBean.atualizarAlunos()}" render="listaAlunos"/>
+									</h:inputText>
+								</div>
+							</div>
+							<br/>
+							<h:panelGroup id="listaAlunos">
+								<div class="widget-followers">
+									<ui:repeat var="aluno" value="#{incluirAlunosBean.alunos}">
+										<div class="follower">
+											<h:graphicImage library="img" value="/resources/img/avatares/#{aluno.avatar}" styleClass="follower-avatar"/>
+											<div class="body">
+												<h:commandLink action="#{incluirAlunosBean.perfilUsuario(aluno)}" immediate="true" value="#{aluno.nome}" styleClass="follower-name"/>
+												<br/>
+												<h:outputText value="#{aluno.matricula}" styleClass="follower-username"/>
+												<div class="follower-controls tooltips" style="margin-top: -5px;">
+													<h:outputLabel value="#{mensagens['display.incluir']}" rendered="#{not aluno.pertenceGrupo}" title="Clique aqui para incluir o aluno" styleClass="btn btn-outline btn-xs">
+														<i class="fa fa-plus"/>
+														<f:ajax event="click" render="@form" listener="#{incluirAlunosBean.incluirAluno(aluno)}"/>
+													</h:outputLabel>
+													<h:outputLabel value="#{mensagens['display.incluido']}" rendered="#{aluno.pertenceGrupo}" title="Aluno incluido" styleClass="btn btn-success btn-xs">
+														<i class="fa fa-check"/>
+													</h:outputLabel>
+												</div>
+											</div>
+										</div>
+									</ui:repeat>
+								</div>
+							</h:panelGroup>
+							<br/>
+							<div class="panel-footer">
+								<div class="form-group">
+									<div class="col-sm-12">
+										<h:commandButton immediate="true" action="#{incluirAlunosBean.voltarTelaDetalharGrupo()}" value="#{mensagens['display.voltar']}" styleClass="btn btn-default btn-xs marginLeft_10"/>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+	</ui:define>
+</ui:composition>

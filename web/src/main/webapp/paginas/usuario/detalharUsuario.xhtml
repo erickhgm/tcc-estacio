@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.aluno']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.professor']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.coordenador']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.consultar.aluno']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.consultar.professor']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.consultar.coordenador']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.listar.aluno']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.listar.professor']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.listar.coordenador']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.detalhar.aluno']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.detalhar.professor']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.detalhar.coordenador']}"  rendered="#{detalharUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+		</ol>
+		<h:messages id="mensagens"  errorClass="alert alert-danger alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<h:form prependId="false" id="form">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel">
+						<div class="panel-heading">
+							<h:outputText value="#{mensagens['display.dados.aluno']}" rendered="#{detalharUsuarioBean.usuario.perfil eq 1}"/>
+							<h:outputText value="#{mensagens['display.dados.professor']}" rendered="#{detalharUsuarioBean.usuario.perfil eq 2}"/>
+							<h:outputText value="#{mensagens['display.dados.coordenador']}" rendered="#{detalharUsuarioBean.usuario.perfil eq 3}"/>
+						</div>
+						
+						<div class="panel-body">
+							<dl>
+								<dt>
+									<h:outputText value="#{mensagens['display.perfil']}: " />
+								</dt>
+								<dd>
+									<h:outputText id="perfil" value="#{detalharUsuarioBean.usuario.dePerfil}"/>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h:outputText value="#{mensagens['display.nome.completo']}:" />
+								</dt>
+								<dd>
+									<h:outputText id="nome" value="#{detalharUsuarioBean.usuario.nome}"/>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h:outputText value="#{mensagens['display.matricula']}: "/>
+								</dt>
+								<dd>
+									<h:outputText id="matricula" value="#{detalharUsuarioBean.usuario.matricula}"/>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h:outputText value="#{mensagens['display.cpf']}: " />	
+								</dt>
+								<dd>
+									<h:outputText id="cpf" value="#{detalharUsuarioBean.usuario.cpf}" converter="cpfConverter"/>
+								</dd>
+							</dl>
+							<dl>
+								<dt>
+									<h:outputText value="#{mensagens['display.email']}: " />
+								</dt>
+								<dd>
+									<h:outputText id="email" value="#{detalharUsuarioBean.usuario.email}"/>
+								</dd>
+							</dl>
+						</div>
+						<div class="panel-footer">
+							<h:commandButton action="#{detalharUsuarioBean.telaConsultar()}" styleClass="btn btn-primary btn-outline btn-xs" value="#{mensagens['display.consultar']}" />
+							<h:commandButton action="#{detalharUsuarioBean.telaAlterar()}" styleClass="btn btn-warning btn-outline btn-xs marginLeft_10" value="#{mensagens['display.alterar']}" />
+							<h:commandButton action="#{detalharUsuarioBean.telaExcluir()}" styleClass="btn btn-danger btn-outline btn-xs marginLeft_10" value="#{mensagens['display.excluir']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

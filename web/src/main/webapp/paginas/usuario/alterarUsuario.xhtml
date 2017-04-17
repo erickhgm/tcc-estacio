@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/template/template.xhtml"
+>
+	<ui:define name="conteudo">
+	<div class="page-header">
+		<ol class="breadcrumb breadcrumb-page">
+			<li>
+				<h:outputLink>
+					<h:outputText value="#{mensagens['display.voce.esta.em']}" />
+				</h:outputLink>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.aluno']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.professor']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.coordenador']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.consultar.aluno']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.consultar.professor']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.consultar.coordenador']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.listar.aluno']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.listar.professor']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.listar.coordenador']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li>
+				<h:outputText value="#{mensagens['display.detalhar.aluno']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.detalhar.professor']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.detalhar.coordenador']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+			<li class="active">
+				<h:outputText value="#{mensagens['display.alterar.aluno']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 1}"/>
+				<h:outputText value="#{mensagens['display.alterar.professor']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 2}"/>
+				<h:outputText value="#{mensagens['display.alterar.coordenador']}"  rendered="#{alterarUsuarioBean.usuario.perfil eq 3}"/>
+			</li>
+		</ol>
+		<h:messages id="mensagens" globalOnly="true" fatalClass="alert alert-danger alert-dark" errorClass="alert alert-warning alert-dark" infoClass="alert alert-info alert-dark" warnClass="alert alert-dark"/>
+	</div>
+	<div id="content" class="content">
+		<h:form prependId="false">
+ 			<div class="row">
+				<div class="col-md-12">
+					<h:form id="form" prependId="false" styleClass="form-horizontal">
+						<div class="panel">
+							<div class="panel-heading">
+								<span class="panel-title"><h:outputText value="#{mensagens['display.alterar.usuario']}" /> </span>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<label class="control-label col-sm-2">
+										<h:outputText value="#{mensagens['display.nome']}:" />
+									</label>
+									<div class="col-sm-4">
+										<h:inputText id="nome"  value="#{alterarUsuarioBean.usuario.nome}" maxlength="58" styleClass="form-control nome" autocomplete="off" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+										<h:message for="nome" errorClass="msg error"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-2">
+										<h:outputText value="#{mensagens['display.matricula']}:" />	
+									</label>
+									<div class="col-sm-2">
+										<div class="input-group">
+											<div class="input-group-btn">
+												<h:commandButton id="btnGerarMatricula" styleClass="btn btn-primary"  value="#{mensagens['display.gerar']}" action="#" disabled="#{alterarUsuarioBean.usuario.perfil == 0}" immediate="true">
+													<f:ajax event="click" render="matricula" listener="#{alterarUsuarioBean.gerarMatricula()}"/>
+												</h:commandButton>
+											</div>
+											<h:inputText id="matricula" value="#{alterarUsuarioBean.usuario.matricula}" readonly="true" maxlength="11"  styleClass="form-control matricula" autocomplete="off" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+										</div>
+										<h:message for="matricula" errorClass="msg error"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-2">
+										<h:outputText value="#{mensagens['display.cpf']}:" />	
+									</label>
+									<div class="col-sm-2">
+										<h:inputText id="cpf" value="#{alterarUsuarioBean.usuario.cpf}" maxlength="11"  styleClass="form-control cpf" autocomplete="off" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}"/>
+										<h:message for="cpf" errorClass="msg error"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-sm-2">
+										<h:outputText value="#{mensagens['display.email']}:" />
+									</label>
+									<div class="col-sm-4">
+										<h:inputText id="email" validatorMessage="#{mensagens['display.email.invalido']}" required="true" requiredMessage="#{mensagens['display.campo.obrigatorio']}" value="#{alterarUsuarioBean.usuario.email}" maxlength="50" styleClass="form-control email"  autocomplete="off">
+											<f:validateRegex  for="email" pattern="#{alterarUsuarioBean.emailPattern}"/>
+										</h:inputText>
+										<h:message for="email" errorClass="msg error"/>
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<h:commandButton value="#{mensagens['display.alterar']}" styleClass="btn btn-primary btn-xs" action="#{alterarUsuarioBean.alterarUsuario()}" />
+									</div>
+								</div>
+							</div>
+						</div>	
+					</h:form>
+				</div>
+			</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
